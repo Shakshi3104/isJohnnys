@@ -41,6 +41,7 @@ def get_images_from_google_search(keyword, max_images, output_dir):
             ), 'html.parser')
 
     ActualImages = []
+    print("Searching " + query + " images ...")
 
     for a in soup.find_all("div", {"class": "rg_meta"}):
         link, Type = json.loads(a.text)["ou"], json.loads(a.text)["ity"]
@@ -56,3 +57,5 @@ def get_images_from_google_search(keyword, max_images, output_dir):
         except Exception as e:
             print("could not load : " + img)
             print(e)
+
+    return save_directory

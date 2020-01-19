@@ -1,4 +1,6 @@
-from images.search import get_images_from_google_search
+from images.collections import ImageCollector, get_list_from_txt
 
-get_images_from_google_search("櫻井翔", 10,
-                              "/Users/user/Downloads")
+imgc = ImageCollector("/Users/user/Downloads/")
+johnnys_list = get_list_from_txt("lists/johnnys_list")
+for men in johnnys_list:
+    imgc.collect_images(men, max_images=100, johnnys=True)
