@@ -43,3 +43,13 @@ class ImageCollector():
         if is_empty(save_dir):
             get_images_from_google_search(keyword=men, max_images=max_images,
                                           output_dir=directory)
+
+    def collect_johnnys_images(self, max_images=100):
+        johnnys_list = get_list_from_txt("lists/johnnys_list")
+        for men in johnnys_list:
+            self.collect_images(men=men, max_images=max_images, johnnys=True)
+
+    def collect_not_johnnys_images(self, max_images=100):
+        others_list = get_list_from_txt("lists/others_list")
+        for men in others_list:
+            self.collect_images(men=men, max_images=max_images, johnnys=False)
