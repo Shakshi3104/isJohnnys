@@ -1,6 +1,7 @@
 from PIL import Image
 import os
 import numpy as np
+import cv2
 
 
 # Cropping Center of Image
@@ -49,13 +50,8 @@ class ImageLoader():
                     # load an image
                     img = Image.open(filepath)
 
-                    """ 顔まわりをクリッピングする処理を書く"""
-                    # crop an image
-                    img = crop_max_square(img)
-
-                    # reshape 25x25
-                    img = img.resize((25, 25))
-                    """ ------------------------------ """
+                    # reshape 64x64
+                    img = img.resize((64, 64))
 
                     # to numpy
                     img = np.array(img)
@@ -63,7 +59,7 @@ class ImageLoader():
                     tmp_list.append(img / 255.)
                     print(img.shape)
 
-            tmp_list = np.array(tmp_list).reshape(-1, 25, 25, 3)
+            tmp_list = np.array(tmp_list).reshape(-1, 64, 64, 3)
             if init:
                 image_list_ = tmp_list
                 init = False
@@ -80,3 +76,85 @@ class ImageLoader():
 
     def load_others_images(self):
         self.load_images(johnnys=False)
+
+
+# 顔まわりをクリッピングして保存する
+class ImageClipper():
+    def __init__(self, input_dir):
+        self.input_dir = input_dir
+        self.input_johnnys_dir = input_dir + "johnnys/"
+        self.input_others_dir = input_dir + "others/"
+        self.output_johnnys_dir = input_dir + "face/johnnys/"
+        self.output_others_dir = input_dir + "face/others/"
+
+    # 参考: https://qiita.com/nirs_kd56/items/bc78bf2c3164a6da1ded
+    def clip_images(self, johnnys=True):
+        input_dir_ = self.input_johnnys_dir
+        output_dir_ = self.output_johnnys_dir
+
+        if not johnnys:
+            input_dir_ = self.input_others_dir
+            output_dir_ = self.output_others_dir
+
+        # 出力用ディレクトリ
+        if not os.path.exists(output_dir_):
+            os.makedirs(output_dir_)
+
+        for dir_ in input_dir_:
+            if dir_.startswith("."):
+                continue
+
+            dir1 = input_dir_ + dir_
+            tmp_list = []
+
+            for file in os.listdir(dir1):
+                if not file.startswith("."):
+                    filepath = dir1 + "/" + file
+                    print(filepath)
+
+                    # load an image
+                    img = cv2.imread(filepath)
+                    if img is None:
+                        print("Not open " + filepath)
+                        continue
+
+                    img_gs = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+                    # write Your cascade path
+                    cascade_path = "/Users/user/anaconda3/lib/python3.7/site-packages/cv2/data/haarcascade_frontalface_alt.xml"
+                    cascade = cv2.CascadeClassifier(cascade_path)
+
+                    # face recognition
+                    face_list = cascade.detectMultiScale(img_gs, scaleFactor=1.1,
+                                                         minNeighbors=2, minSize=(64, 64))
+
+                    # 顔が1つ以上検出されたとき
+                    if len(face_list) > 0:
+                        for rect in face_list:
+                            x, y, width, height = rect
+                            # img = img[rect[1]:rect[1] + rect[3], rect[0]:rect[0] + rect[2]]
+                            img = img[y:y + height, x:x + width]
+
+                            # サイズが64以上ではなかったとき
+                            if img.shape[0]<64:
+                                continue
+
+                            # resize 64x64
+                            img = cv2.resize(img, (64, 64))
+
+                            # save
+                            filename = output_dir_ + file
+                            cv2.imwrite(filename, img)
+                            print("Saving " + filename)
+
+                    # 顔が検出されなかったとき
+                    else:
+                        print("No face")
+                        continue
+
+                    print(img.shape)
+
+    def clip_johnnys_image(self):
+        self.clip_images(johnnys=True)
+
+    def clip_others_image(self):
+        self.clip_images(johnnys=False)
