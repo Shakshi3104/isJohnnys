@@ -9,7 +9,7 @@ is Johnny's?
 CNNを用いたジャニーズ顔判定モデルを作成するために使用したコード
 
 ## Features
-- isJohnnys/images: スクレイピングによる画像収集のコード
+- isJohnnys/images: スクレイピングによる画像収集のコード, 画像読み込みのコード
 - isJohnnys/networks: Keras(`tensorflow.keras`)を用いたCNNの実装と学習のコード
 
 # Dependency
