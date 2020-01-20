@@ -13,7 +13,8 @@ CNNを用いたジャニーズ顔判定モデルを作成するために使用�
 - isJohnnys/networks: Keras(`tensorflow.keras`)を用いたCNNの実装と学習のコード
 
 # Dependency
-- `tensorflow 1.14.0`
-- `beautifulsoup4 4.7.1`
+- `tensorflow            1.14.0`
+- `beautifulsoup4        4.7.1`
+- `opencv-contrib-python 4.1.2.30 `
 
  
