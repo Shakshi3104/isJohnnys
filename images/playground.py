@@ -1,6 +1,11 @@
-from images.collect import ImageCollector, get_list_from_txt
+from images.collect import ImageCollector
+from images.load import ImageClipper, ImageLoader
 
-imgc = ImageCollector("/Users/user/Downloads/")
-johnnys_list = get_list_from_txt("lists/johnnys_list")
-for men in johnnys_list:
-    imgc.collect_images(men, max_images=100, johnnys=True)
+collector = ImageCollector("/Users/user/Downloads/")
+# collector.collect_johnnys_images(max_images=10)
+
+clipper = ImageClipper("/Users/user/Downloads/")
+# clipper.clip_johnnys_image()
+
+loader = ImageLoader("/Users/user/Downloads/face/", ["相葉雅紀", "松本潤", "二宮和也", "大野智", "櫻井翔"])
+images, labels, details = loader.load_johnnys_images()

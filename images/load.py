@@ -19,10 +19,11 @@ def crop_max_square(pil_img):
 
 
 class ImageLoader():
-    def __init__(self, input_dir):
+    def __init__(self, input_dir, detail_label_list):
         self.input_dir = input_dir
         self.input_johnnys_dir = input_dir + "johnnys/"
         self.input_others_dir = input_dir + "others/"
+        self.detail_label_list = detail_label_list
 
     # 参考: https://qiita.com/hiroeorz@github/items/ecb39ed4042ebdc0a957
     def load_images(self, johnnys=True):
@@ -33,9 +34,10 @@ class ImageLoader():
             dirpath = self.input_others_dir
 
         image_list_ = []
+        label_detail_list_ = []
         init = True
 
-        for dir_ in dirpath:
+        for dir_ in os.listdir(dirpath):
             if dir_.startswith("."):
                 continue
 
@@ -44,6 +46,9 @@ class ImageLoader():
 
             for file in os.listdir(dir1):
                 if not file.startswith("."):
+                    # 詳細なラベルのリスト
+                    label_detail_list_.append(self.detail_label_list.index(dir_))
+
                     filepath = dir1 + "/" + file
                     print(filepath)
 
@@ -67,15 +72,16 @@ class ImageLoader():
                 image_list_ = np.append(image_list_, tmp_list, axis=0)
 
         label_list_ = np.array([label_] * len(image_list_))
+        label_detail_list_ = np.array(label_detail_list_)
 
         # return list of images and list of correct labels
-        return image_list_, label_list_
+        return image_list_, label_list_, label_detail_list_
 
     def load_johnnys_images(self):
-        self.load_images(johnnys=True)
+        return self.load_images(johnnys=True)
 
     def load_others_images(self):
-        self.load_images(johnnys=False)
+        return self.load_images(johnnys=False)
 
 
 # 顔まわりをクリッピングして保存する
@@ -100,12 +106,16 @@ class ImageClipper():
         if not os.path.exists(output_dir_):
             os.makedirs(output_dir_)
 
-        for dir_ in input_dir_:
+        for dir_ in os.listdir(input_dir_):
             if dir_.startswith("."):
                 continue
 
+            # 入力ディレクトリ
             dir1 = input_dir_ + dir_
-            tmp_list = []
+            # 出力ディレクトリ
+            output_dir__ = output_dir_ + dir_
+            if not os.path.exists(output_dir__):
+                os.makedirs(output_dir__)
 
             for file in os.listdir(dir1):
                 if not file.startswith("."):
@@ -142,7 +152,7 @@ class ImageClipper():
                             img = cv2.resize(img, (64, 64))
 
                             # save
-                            filename = output_dir_ + file
+                            filename = output_dir__ + "/" + file
                             cv2.imwrite(filename, img)
                             print("Saving " + filename)
 

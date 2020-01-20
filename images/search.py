@@ -47,6 +47,9 @@ def get_images_from_google_search(keyword, max_images, output_dir):
         link, Type = json.loads(a.text)["ou"], json.loads(a.text)["ity"]
         ActualImages.append((link, Type))
     for i, (img, Type) in enumerate(ActualImages[0:max_images]):
+        if Type == 'img':
+            continue
+
         try:
             Type = Type if len(Type) > 0 else 'jpg'
             print("Downloading image {} ({}), type is {}".format(i, img, Type))
