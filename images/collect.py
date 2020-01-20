@@ -30,12 +30,12 @@ class ImageCollector():
     def __init__(self, output_dir):
         self.output_dir = output_dir
         self.output_johnnys_dir = output_dir + "johnnys/"
-        self.output_not_johnnys_dir = output_dir + "not/"
+        self.output_others_dir = output_dir + "others/"
 
     def collect_images(self, men, max_images=100, johnnys=True):
         directory = self.output_johnnys_dir
         if not johnnys:
-            directory = self.output_not_johnnys_dir
+            directory = self.output_others_dir
 
         save_dir = get_images_from_google_search(keyword=men, max_images=max_images,
                                                  output_dir=directory)
@@ -49,7 +49,7 @@ class ImageCollector():
         for men in johnnys_list:
             self.collect_images(men=men, max_images=max_images, johnnys=True)
 
-    def collect_not_johnnys_images(self, max_images=100):
+    def collect_others_images(self, max_images=100):
         others_list = get_list_from_txt("lists/others_list")
         for men in others_list:
             self.collect_images(men=men, max_images=max_images, johnnys=False)

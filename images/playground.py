@@ -1,4 +1,4 @@
-from images.collections import ImageCollector, get_list_from_txt
+from images.collect import ImageCollector, get_list_from_txt
 
 imgc = ImageCollector("/Users/user/Downloads/")
 johnnys_list = get_list_from_txt("lists/johnnys_list")
