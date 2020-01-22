@@ -123,45 +123,50 @@ class ImageClipper():
                     print(filepath)
 
                     # load an image
-                    img = cv2.imread(filepath)
-                    if img is None:
-                        print("Not open " + filepath)
-                        continue
+                    try:
+                        img = cv2.imread(filepath)
 
-                    img_gs = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-                    # write Your cascade path
-                    cascade_path = "/Users/user/anaconda3/lib/python3.7/site-packages/cv2/data/haarcascade_frontalface_alt.xml"
-                    cascade = cv2.CascadeClassifier(cascade_path)
+                        if img is None:
+                            print("Not open " + filepath)
+                            continue
 
-                    # face recognition
-                    face_list = cascade.detectMultiScale(img_gs, scaleFactor=1.1,
-                                                         minNeighbors=2, minSize=(64, 64))
+                        img_gs = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+                        # write Your cascade path
+                        cascade_path = "/Users/user/anaconda3/lib/python3.7/site-packages/cv2/data/haarcascade_frontalface_alt.xml"
+                        cascade = cv2.CascadeClassifier(cascade_path)
 
-                    # 顔が1つ以上検出されたとき
-                    if len(face_list) > 0:
-                        for rect in face_list:
-                            x, y, width, height = rect
-                            # img = img[rect[1]:rect[1] + rect[3], rect[0]:rect[0] + rect[2]]
-                            img = img[y:y + height, x:x + width]
+                        # face recognition
+                        face_list = cascade.detectMultiScale(img_gs, scaleFactor=1.1,
+                                                             minNeighbors=2, minSize=(64, 64))
 
-                            # サイズが64以上ではなかったとき
-                            if img.shape[0]<64:
-                                continue
+                        # 顔が1つ以上検出されたとき
+                        if len(face_list) > 0:
+                            for rect in face_list:
+                                x, y, width, height = rect
+                                # img = img[rect[1]:rect[1] + rect[3], rect[0]:rect[0] + rect[2]]
+                                img = img[y:y + height, x:x + width]
 
-                            # resize 64x64
-                            img = cv2.resize(img, (64, 64))
+                                # サイズが64以上ではなかったとき
+                                if img.shape[0]<64:
+                                    continue
 
-                            # save
-                            filename = output_dir__ + "/" + file
-                            cv2.imwrite(filename, img)
-                            print("Saving " + filename)
+                                # resize 64x64
+                                img = cv2.resize(img, (64, 64))
 
-                    # 顔が検出されなかったとき
-                    else:
-                        print("No face")
-                        continue
+                                # save
+                                filename = output_dir__ + "/" + file
+                                cv2.imwrite(filename, img)
+                                print("Saving " + filename)
+                                print(img.shape)
 
-                    print(img.shape)
+                        # 顔が検出されなかったとき
+                        else:
+                            print("No face")
+                            continue
+
+                    except Exception as e:
+                        print("could not open : " + filepath + "by `imread`")
+                        print(e)
 
     def clip_johnnys_image(self):
         self.clip_images(johnnys=True)
