@@ -1,5 +1,6 @@
 from tensorflow.keras.layers import Input, Lambda, Conv2D, MaxPooling2D, Flatten, Dense
-from tensorflow.keras.models import Model
+from tensorflow.keras.models import Model, Sequential
+from tensorflow.keras.applications import vgg16, vgg19
 from tensorflow.image import resize_images
 
 
@@ -47,5 +48,25 @@ def VGG(weight_layer_num=16, side=64, labels=2):
     x = Dense(units=4096, activation='relu')(x)
     predictions = Dense(labels, activation='softmax')(x)
     model = Model(inputs=inputs, outputs=predictions)
+
+    return model
+
+
+def pretrained_VGG(weight_layer_num=16, side=64, labels=2, frozen_layer_num=15):
+    if weight_layer_num == 19:
+        vgg_ = vgg19.VGG19(weights='imagenet', input_shape=(side, side, 3), include_top=False)
+    else:
+        vgg_ = vgg16.VGG16(weights='imagenet', input_shape=(side, side, 3), include_top=False)
+
+    top_ = Sequential()
+    top_.add(Flatten(input_shape=vgg_.output_shape[1:]))
+    top_.add(Dense(4096, activation='relu'))
+    top_.add(Dense(4096, activation='relu'))
+    top_.add(Dense(labels, activation='softmax'))
+
+    model = Model(inputs=vgg_.input, output=top_(vgg_.output))
+
+    for layer in vgg_.layers[:frozen_layer_num]:
+        layer.trainable = False
 
     return model
