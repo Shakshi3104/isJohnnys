@@ -8,14 +8,15 @@ from images.collect import get_list_from_txt
 class Dataset():
     def __init__(self, input_dir, colab=False):
         if colab:
-            johnnys_detail = get_list_from_txt("lists/johnnys_list")
-            others_detail = get_list_from_txt("lists/others_list")
-            group_member = pd.read_csv("lists/group_member.csv")
-        else:
+            # Google Colaboratoryで読み込む場合
             colab_path = "/content/isJohnnys/images/"
             johnnys_detail = get_list_from_txt(colab_path + "lists/johnnys_list")
             others_detail = get_list_from_txt(colab_path + "lists/others_list")
             group_member = pd.read_csv(colab_path + "lists/group_member.csv")
+        else:
+            johnnys_detail = get_list_from_txt("lists/johnnys_list")
+            others_detail = get_list_from_txt("lists/others_list")
+            group_member = pd.read_csv("lists/group_member.csv")
 
         detail_label_list = johnnys_detail + others_detail
         self.loader = ImageLoader(input_dir=input_dir, detail_label_list=detail_label_list)
