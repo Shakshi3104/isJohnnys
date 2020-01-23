@@ -1,7 +1,6 @@
-is Johnny's?
+JohnnyFace
 ====
-
-データマイニングの自由課題
+JohnnyFace: Whether the face is Johnny's or not?
 
 ジャニーズ顔かどうかを判定するモデルを作成する
 
