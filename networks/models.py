@@ -6,7 +6,7 @@ from tensorflow.image import resize_images
 def VGG(weight_layer_num=16, side=256):
     "weight_layer_num = 11 or 13 or 16 or 19, それ以外の数字の場合は11になる"
 
-    inputs = Input(shape=(side, side, 1))
+    inputs = Input(shape=(side, side, 3))
     # 画像のサイズを224x224にする
     # http://blog.neko-ni-naritai.com/entry/2018/04/07/115504を参考にした
     x = Lambda(lambda image: resize_images(image, (224, 224)))(inputs)
