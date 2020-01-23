@@ -3,7 +3,7 @@ from tensorflow.keras.models import Model
 from tensorflow.image import resize_images
 
 
-def VGG(weight_layer_num=16, side=256):
+def VGG(weight_layer_num=16, side=64, labels=2):
     "weight_layer_num = 11 or 13 or 16 or 19, それ以外の数字の場合は11になる"
 
     inputs = Input(shape=(side, side, 3))
@@ -45,7 +45,7 @@ def VGG(weight_layer_num=16, side=256):
     x = Flatten()(x)
     x = Dense(units=4096, activation='relu')(x)
     x = Dense(units=4096, activation='relu')(x)
-    predictions = Dense(10, activation='softmax')(x)
+    predictions = Dense(labels, activation='softmax')(x)
     model = Model(inputs=inputs, outputs=predictions)
 
     return model
