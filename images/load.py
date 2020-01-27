@@ -141,7 +141,7 @@ class ImageClipper():
 
                         # 顔が1つ以上検出されたとき
                         if len(face_list) > 0:
-                            for rect in face_list:
+                            for i, rect in enumerate(face_list):
                                 x, y, width, height = rect
                                 # img = img[rect[1]:rect[1] + rect[3], rect[0]:rect[0] + rect[2]]
                                 img = img[y:y + height, x:x + width]
@@ -154,7 +154,7 @@ class ImageClipper():
                                 img = cv2.resize(img, (64, 64))
 
                                 # save
-                                filename = output_dir__ + "/" + file
+                                filename = output_dir__ + "/" + file + "-" + str(i)
                                 cv2.imwrite(filename, img)
                                 print("Saving " + filename)
                                 print(img.shape)
