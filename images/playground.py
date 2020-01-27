@@ -1,3 +1,4 @@
+from images.search import get_images_from_google_search
 from images.collect import ImageCollector
 from images.load import ImageClipper, ImageLoader
 from images.dataset import Dataset
@@ -8,14 +9,20 @@ from tensorflow.keras.models import load_model
 # collector.collect_johnnys_images()
 # collector.collect_others_images()
 
+# re_collects = [["ジェシー", "SixTONES"],
+#                ["ラウール", "Snow", "Man"],
+#                ["橋本亮介", "A.B.C-Z"]]
+#
+# for re_collect in re_collects:
+#     get_images_from_google_search(re_collect, 100, "/Users/user/Downloads/Johnnys_re/")
+
 # clipper = ImageClipper("/Users/user/Downloads/")
 # clipper.clip_johnnys_image()
 # clipper.clip_others_image()
 
-# dataset = Dataset("/Users/user/Downloads/face/")
-# images, labels, details = dataset.load_data()
-# print(images.shape)
-
+dataset = Dataset("/Users/user/Downloads/face/")
+images, labels, details = dataset.load_data()
+print(images.shape)
 
 # from images.dataset import Dataset
 # from sklearn.model_selection import train_test_split
@@ -46,3 +53,4 @@ from tensorflow.keras.models import load_model
 # plot_history(stack)
 #
 # detect_images("/Users/user/Downloads/predict", model)
+#
