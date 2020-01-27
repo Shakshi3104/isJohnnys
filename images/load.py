@@ -154,7 +154,7 @@ class ImageClipper():
                                 img = cv2.resize(img, (64, 64))
 
                                 # save
-                                filename = output_dir__ + "/" + file + "-" + str(i)
+                                filename = output_dir__ + "/" + str(i) + "-" + file
                                 cv2.imwrite(filename, img)
                                 print("Saving " + filename)
                                 print(img.shape)

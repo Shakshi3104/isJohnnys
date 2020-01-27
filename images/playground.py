@@ -3,7 +3,6 @@ from images.collect import ImageCollector
 from images.load import ImageClipper, ImageLoader
 from images.dataset import Dataset
 from images.predict import detect_images
-from tensorflow.keras.models import load_model
 
 # collector = ImageCollector("/Users/user/Downloads/")
 # collector.collect_johnnys_images()
