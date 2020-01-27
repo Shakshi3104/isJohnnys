@@ -2,6 +2,7 @@ from PIL import Image
 import os
 import numpy as np
 import cv2
+import unicodedata
 
 
 # Cropping Center of Image
@@ -43,11 +44,13 @@ class ImageLoader():
 
             dir1 = dirpath + dir_
             tmp_list = []
+            # UTF-8-Mac -> UTF-8
+            detail_label = unicodedata.normalize('NFC', dir_)
 
             for file in os.listdir(dir1):
                 if not file.startswith("."):
                     # 詳細なラベルのリスト
-                    label_detail_list_.append(self.detail_label_list.index(dir_))
+                    label_detail_list_.append(self.detail_label_list.index(detail_label))
 
                     filepath = dir1 + "/" + file
                     print(filepath)

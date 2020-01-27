@@ -4,7 +4,7 @@ import cv2
 import os
 
 
-def detect_face(image, model):
+def predict_face(image, model):
     print(image.shape)
 
     image_gs = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
@@ -41,7 +41,7 @@ def detect_face(image, model):
     return image
 
 
-def detect_images(input_dir, model):
+def predict_images(input_dir, model):
     for file in os.listdir(input_dir):
         if not file.startswith("."):
             filepath = input_dir + "/" + file
@@ -55,7 +55,7 @@ def detect_images(input_dir, model):
 
                 b, g, r = cv2.split(image)
                 image = cv2.merge([r, g, b])
-                predict_image = detect_face(image, model)
+                predict_image = predict_face(image, model)
 
                 plt.imshow(predict_image)
                 plt.savefig(input_dir + "/" + "predict_" + file)

@@ -1,7 +1,8 @@
 from tensorflow.keras.layers import Input, Lambda, Conv2D, MaxPooling2D, Flatten, Dense
 from tensorflow.keras.models import Model, Sequential
 from tensorflow.keras.applications import vgg16, vgg19
-from tensorflow.image import resize_images
+# from tensorflow.image import resize_images         # tensorflow v1.14
+from tensorflow.keras.backend import resize_images   # tensorflow v1.15
 
 
 def VGG(weight_layer_num=16, side=64, labels=2):

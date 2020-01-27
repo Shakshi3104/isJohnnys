@@ -2,7 +2,7 @@ from images.search import get_images_from_google_search
 from images.collect import ImageCollector
 from images.load import ImageClipper, ImageLoader
 from images.dataset import Dataset
-from images.predict import detect_images
+from images.predict import predict_images
 
 # collector = ImageCollector("/Users/user/Downloads/")
 # collector.collect_johnnys_images()

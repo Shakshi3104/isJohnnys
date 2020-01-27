@@ -36,14 +36,14 @@ def plot_history(stack, filename=None):
     plt.figure()
 
 
-def training(images, labels, pretrain=False, history_path=None, epochs=100, batch_size=50, lr=1e-4):
+def training(images, labels, pretrain=False, history_path=None, epochs=100, batch_size=50, lr=1e-4, frozen_layer_num=15):
     x_train, x_test, y_train, y_test = train_test_split(images, labels, test_size=0.2)
 
     y_train = to_categorical(y_train, 2)
     y_test_ = to_categorical(y_test, 2)
 
     if pretrain:
-        model = pretrained_VGG(weight_layer_num=16, side=64, labels=2, frozen_layer_num=15)
+        model = pretrained_VGG(weight_layer_num=16, side=64, labels=2, frozen_layer_num=frozen_layer_num)
     else:
         model = VGG(weight_layer_num=16, side=64, labels=2)
 
