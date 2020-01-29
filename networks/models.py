@@ -45,8 +45,8 @@ def VGG(weight_layer_num=16, side=64, labels=2):
         x = MaxPooling2D(pool_size=(2, 2), strides=(2, 2), padding='same')(x)
 
     x = Flatten()(x)
-    x = Dense(units=4096, activation='relu')(x)
-    x = Dense(units=4096, activation='relu')(x)
+    x = Dense(units=1024, activation='relu')(x)
+    x = Dense(units=1024, activation='relu')(x)
     predictions = Dense(labels, activation='softmax')(x)
     model = Model(inputs=inputs, outputs=predictions)
 
@@ -61,8 +61,8 @@ def pretrained_VGG(weight_layer_num=16, side=64, labels=2, frozen_layer_num=15):
 
     top_ = Sequential()
     top_.add(Flatten(input_shape=vgg_.output_shape[1:]))
-    top_.add(Dense(4096, activation='relu'))
-    top_.add(Dense(4096, activation='relu'))
+    top_.add(Dense(1024, activation='relu'))
+    top_.add(Dense(1024, activation='relu'))
     top_.add(Dense(labels, activation='softmax'))
 
     model = Model(inputs=vgg_.input, output=top_(vgg_.output))
