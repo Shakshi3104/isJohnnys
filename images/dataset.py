@@ -21,10 +21,15 @@ class Dataset():
         detail_label_list = johnnys_detail + others_detail
         self.loader = ImageLoader(input_dir=input_dir, detail_label_list=detail_label_list)
         self.group_member = group_member
+        self.johnnys_image_num = 0
+        self.others_image_num = 0
 
     def load_data(self):
         johnnys_images, johnnys_labels, johnnys_detail_labels = self.loader.load_johnnys_images()
         others_images, others_labels, others_detail_labels = self.loader.load_others_images()
+
+        self.johnnys_image_num = len(johnnys_images)
+        self.others_image_num = len(others_images)
 
         images = np.concatenate([johnnys_images, others_images], axis=0)
         labels = np.concatenate([johnnys_labels, others_labels], axis=0)
