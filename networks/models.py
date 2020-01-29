@@ -11,7 +11,7 @@ def VGG(weight_layer_num=16, side=64, labels=2):
     inputs = Input(shape=(side, side, 3))
     # 画像のサイズを224x224にする
     # http://blog.neko-ni-naritai.com/entry/2018/04/07/115504を参考にした
-    x = Lambda(lambda image: resize_images(image, height_factor=224, width_factor=224, data_format="channels_last"))(inputs)
+    # x = Lambda(lambda image: resize_images(image, height_factor=3, width_factor=3, data_format="channels_last"))(inputs)
 
     # conv block 1
     x = Conv2D(filters=64, kernel_size=(3, 3), padding='same', activation='relu')(x)
