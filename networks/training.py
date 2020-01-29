@@ -5,7 +5,6 @@ from sklearn.model_selection import train_test_split
 from tensorflow.keras.utils import to_categorical
 from networks.models import VGG, pretrained_VGG
 from tensorflow.keras.optimizers import Adam
-from networks.training import plot_history
 
 
 def plot_history(stack, filename=None):
