@@ -78,7 +78,7 @@ def pretrained_VGG(weight_layer_num=16, side=64, labels=2, frozen_layer_num=None
 
     for layer in vgg_.layers[:frozen_layer_num]:
         layer.trainable = False
-        
+
     for i, layer in enumerate(model.layers):
         print("layer " + str(i) + " trainable: " + str(layer.trainable))
 
