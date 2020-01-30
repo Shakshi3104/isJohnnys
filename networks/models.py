@@ -53,11 +53,13 @@ def VGG(weight_layer_num=16, side=64, labels=2):
     return model
 
 
-def pretrained_VGG(weight_layer_num=16, side=64, labels=2, frozen_layer_num=15):
+def pretrained_VGG(weight_layer_num=16, side=64, labels=2, frozen_layer_num=None, frozen_block_num=None):
     if weight_layer_num == 19:
         vgg_ = vgg19.VGG19(weights='imagenet', input_shape=(side, side, 3), include_top=False)
+        block_layer_table = [0, 4, 7, 12, 17, 21]
     else:
         vgg_ = vgg16.VGG16(weights='imagenet', input_shape=(side, side, 3), include_top=False)
+        block_layer_table = [0, 4, 7, 11, 15, 19]
 
     top_ = Sequential()
     top_.add(Flatten(input_shape=vgg_.output_shape[1:]))
@@ -66,6 +68,15 @@ def pretrained_VGG(weight_layer_num=16, side=64, labels=2, frozen_layer_num=15):
     top_.add(Dense(labels, activation='softmax'))
 
     model = Model(inputs=vgg_.inputs, outputs=top_(vgg_.outputs))
+
+    if frozen_layer_num is None and frozen_block_num is None:
+        print("No frozen layers: fine-tuning")
+        return model
+
+    if frozen_block_num is not None:
+        frozen_layer_num = block_layer_table[frozen_block_num]
+
+    print("frozen layers: -", frozen_layer_num)
 
     for layer in vgg_.layers[:frozen_layer_num]:
         layer.trainable = False
