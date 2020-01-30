@@ -65,7 +65,7 @@ def pretrained_VGG(weight_layer_num=16, side=64, labels=2, frozen_layer_num=15):
     top_.add(Dense(1024, activation='relu'))
     top_.add(Dense(labels, activation='softmax'))
 
-    model = Model(inputs=vgg_.input, output=top_(vgg_.output))
+    model = Model(inputs=vgg_.inputs, outputs=top_(vgg_.outputs))
 
     for layer in vgg_.layers[:frozen_layer_num]:
         layer.trainable = False
