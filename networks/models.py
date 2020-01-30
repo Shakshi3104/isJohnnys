@@ -76,9 +76,8 @@ def pretrained_VGG(weight_layer_num=16, side=64, labels=2, frozen_layer_num=None
     if frozen_block_num is not None:
         frozen_layer_num = block_layer_table[frozen_block_num]
 
-    print("frozen layers: -", frozen_layer_num)
-
-    for layer in vgg_.layers[:frozen_layer_num]:
+    for i, layer in enumerate(vgg_.layers[:frozen_layer_num]):
         layer.trainable = False
+        print("layer " + str(i) + "trainable: " + str(layer.trainable))
 
     return model
