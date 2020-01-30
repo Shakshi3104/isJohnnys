@@ -42,6 +42,10 @@ def predict_face(image, model):
 
 
 def predict_images(input_dir, model):
+    save_directory = input_dir + "/" + "predicted"
+    if not os.path.exists(save_directory):
+        os.makedirs(save_directory)
+
     for file in os.listdir(input_dir):
         if not file.startswith("."):
             filepath = input_dir + "/" + file
@@ -58,7 +62,7 @@ def predict_images(input_dir, model):
                 predict_image = predict_face(image, model)
 
                 plt.imshow(predict_image)
-                plt.savefig(input_dir + "/" + "predict_" + file)
+                plt.savefig(save_directory + "/" + "predict_" + file)
                 plt.show()
 
             except Exception as e:
