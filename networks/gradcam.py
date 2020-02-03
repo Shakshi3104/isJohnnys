@@ -1,7 +1,5 @@
 # https://github.com/kinziro/keras-grad-cam/blob/master/grad-cam.py
 # の実装をtensorflow.keras用に書き直した
-from tensorflow.keras.applications.imagenet_utils import preprocess_input, decode_predictions
-from tensorflow.keras.preprocessing import image
 from tensorflow.keras.layers import Lambda
 from tensorflow.python.framework import ops
 import tensorflow.keras.backend as K
