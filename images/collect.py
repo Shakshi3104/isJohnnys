@@ -1,18 +1,6 @@
 import os
 from images.search import get_images_from_google_search
-
-
-# txtファイルからリストを読み込む
-def get_list_from_txt(filepath: str):
-    f = open(filepath)
-    lines = f.readlines()
-    f.close()
-
-    list_ = []
-    for line in lines:
-        list_.append(line.replace("\n", ""))
-
-    return list_
+from images.utils import get_list_from_txt
 
 
 # ディレクトリが空かどうかを判定する

@@ -6,6 +6,8 @@ from bs4 import BeautifulSoup
 import requests
 import tweepy
 
+from images.utils import get_list_from_txt
+
 
 # パーセントエンコーディング文字列の変換
 # 参考: https://qiita.com/yagays/items/e59731b3930252b5f0c4
@@ -71,10 +73,11 @@ def get_images_from_google_search(keyword, max_images, output_dir):
 # 参考: https://qiita.com/koki-sato/items/c16c8e3445287698b3a8
 def get_image_urls_from_twitter_search(keyword, max_images=100, pages=10):
     # 認証キー
-    CONSUMER_KEY = "YgwFipymycZHOd3jYtq5Ps0lZ"
-    CONSUMER_SECRET = "JmgQfPFfJbgV5kxm56XL5Rxoca0MqFfgDSsDmGQaoJVpOEcCJX"
-    ACESS_TOKEN = "1605664022-17YZRxppOMcNf58sNDtMW7zctTbXXFQ1G6zWpaR"
-    ACESS_TOKEN_SECRET = "D6H984CeDrCeqlPZehxeYF9oOSLcdmKCeUElxsFT4SnYu"
+    key = get_list_from_txt("lists/key")
+    CONSUMER_KEY = key[0]
+    CONSUMER_SECRET = key[1]
+    ACESS_TOKEN = key[2]
+    ACESS_TOKEN_SECRET = key[3]
 
     # OAuth認証
     auth = tweepy.OAuthHandler(CONSUMER_KEY, CONSUMER_SECRET)

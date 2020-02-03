@@ -2,7 +2,7 @@ import numpy as np
 import pandas as pd
 
 from images.load import ImageLoader
-from images.collect import get_list_from_txt
+from images.utils import get_list_from_txt
 
 
 class Dataset():

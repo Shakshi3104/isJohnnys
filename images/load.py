@@ -84,6 +84,3 @@ class ImageLoader():
 
     def load_others_images(self):
         return self.load_images(johnnys=False)
-
-
-
