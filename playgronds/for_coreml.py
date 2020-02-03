@@ -15,3 +15,5 @@ model = Model(inputs=vgg_.inputs, outputs=top_(vgg_.outputs))
 
 # 重みをloadする
 model.load_weights("/Users/user/Downloads/vgg16_imagenet.hdf5")
+
+

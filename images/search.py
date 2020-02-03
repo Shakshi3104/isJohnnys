@@ -111,6 +111,8 @@ def get_images_from_twitter_search(keyword, max_images, output_dir):
     if not os.path.exists(save_directory):
         os.makedirs(save_directory)
 
+    print("Searching " + keyword + " images ...")
+
     for url in media_url_list:
         # print(url)
         url_orig = url + ":orig"
@@ -129,8 +131,7 @@ def get_images_from_twitter_search(keyword, max_images, output_dir):
 
 
 if __name__ == '__main__':
-    research_list = ["森本慎太郎", "藤ヶ谷大輔", "八乙女光", "佐久間大介", "宮田俊哉",
-                     "ジェシー", "横山裕", "中島裕翔"]
+    research_list = ["藤ヶ谷大輔", "ジェシー"]
 
     for word in research_list:
         get_images_from_twitter_search(word, 100, "/Users/user/Downloads/Johnnys_re/")
