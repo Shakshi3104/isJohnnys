@@ -1,6 +1,7 @@
 from images.search import get_images_from_google_search
 from images.collect import ImageCollector
-from images.load import ImageClipper, ImageLoader
+from images.load import ImageLoader
+from images.clip import ImageClipper
 from images.dataset import Dataset
 from images.predict import predict_images
 
@@ -23,3 +24,5 @@ dataset = Dataset("/Users/user/Downloads/face/")
 images, labels, details = dataset.load_data()
 print(images.shape)
 
+# clipper = ImageClipper("/Users/user/Downloads/")
+# clipper.clip_images("/Users/user/Downloads/Johnnys_re/", "/Users/user/Downloads/face_re/")
