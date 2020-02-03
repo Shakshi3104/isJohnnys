@@ -5,6 +5,7 @@ import os
 
 from networks.gradcam import grad_cam
 
+
 def predict_gradcam(image, model, layer_name="block5_conv3"):
     print(image.shape)
     image_gs = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
@@ -30,9 +31,11 @@ def predict_gradcam(image, model, layer_name="block5_conv3"):
             image[rect[1]:rect[1] + rect[3], rect[0]:rect[0] + rect[2]] = cam
 
             # モデルの予測結果
+            img = img / 255.
             img = np.expand_dims(img, axis=0)
             pred = model.predict(img)
             pred = np.argmax(pred, axis=1)
+
             if pred == 0:
                 label = "Johnny's"
             else:
@@ -50,7 +53,7 @@ def predict_gradcam(image, model, layer_name="block5_conv3"):
 def predict_face(image, model):
     print(image.shape)
 
-    image_gs = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+    image_gs = cv2.cvtColor(image, cv2.COLOR_RGB2GRAY)
     cascade_path = "/Users/user/anaconda3/lib/python3.7/site-packages/cv2/data/haarcascade_frontalface_alt.xml"
     cascade = cv2.CascadeClassifier(cascade_path)
 
@@ -66,6 +69,7 @@ def predict_face(image, model):
                 continue
 
             img = cv2.resize(img, (64, 64))
+            img = img / 255.
             img = np.expand_dims(img, axis=0)
 
             # モデルの予測結果
@@ -103,12 +107,14 @@ def predict_images(input_dir, model, gradcam=False):
                 b, g, r = cv2.split(image)
                 image = cv2.merge([r, g, b])
                 if gradcam:
+                    head = "gradcam_"
                     predict_image = predict_gradcam(image, model)
                 else:
+                    head = "predict_"
                     predict_image = predict_face(image, model)
 
                 plt.imshow(predict_image)
-                plt.savefig(save_directory + "/" + "predict_" + file)
+                plt.savefig(save_directory + "/" + head + file)
                 plt.show()
 
             except Exception as e:

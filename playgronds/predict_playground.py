@@ -15,7 +15,7 @@ os.environ['KMP_DUPLICATE_LIB_OK'] = 'True'
 
 # 予測
 model = load_model("/Users/user/Downloads/vgg16_imagenet.h5")
-predict_images("/Users/user/Downloads/predict", model)
+predict_images("/Users/user/Downloads/predict", model, gradcam=False)
 
 # # Grad-cam
 # filepath = "/Users/user/Downloads/grad_cam/img_36 15.18.29.jpg"
