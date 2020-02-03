@@ -15,5 +15,6 @@ CNNを用いたジャニーズ顔判定モデルを作成するために使用�
 - `tensorflow            1.15.0`
 - `beautifulsoup4        4.7.1`
 - `opencv-contrib-python 4.1.2.30 `
+- `tweepy                3.8.0`  
 
  

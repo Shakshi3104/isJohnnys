@@ -4,6 +4,7 @@ import urllib
 
 from bs4 import BeautifulSoup
 import requests
+import tweepy
 
 
 # パーセントエンコーディング文字列の変換
@@ -64,3 +65,72 @@ def get_images_from_google_search(keyword, max_images, output_dir):
             print(e)
 
     return save_directory
+
+
+# Twitterの検索から画像を持ってくる
+# 参考: https://qiita.com/koki-sato/items/c16c8e3445287698b3a8
+def get_image_urls_from_twitter_search(keyword, max_images=100, pages=10):
+    # 認証キー
+    CONSUMER_KEY = "YgwFipymycZHOd3jYtq5Ps0lZ"
+    CONSUMER_SECRET = "JmgQfPFfJbgV5kxm56XL5Rxoca0MqFfgDSsDmGQaoJVpOEcCJX"
+    ACESS_TOKEN = "1605664022-17YZRxppOMcNf58sNDtMW7zctTbXXFQ1G6zWpaR"
+    ACESS_TOKEN_SECRET = "D6H984CeDrCeqlPZehxeYF9oOSLcdmKCeUElxsFT4SnYu"
+
+    # OAuth認証
+    auth = tweepy.OAuthHandler(CONSUMER_KEY, CONSUMER_SECRET)
+    auth.set_access_token(ACESS_TOKEN, ACESS_TOKEN_SECRET)
+
+    # APIインスタンスを生成
+    api = tweepy.API(auth)
+
+    # 検索
+    max_id = None
+    media_url_list = []
+    search_word = "\"" + keyword + "\" lang:ja filter:images"
+    for _ in range(pages):
+        if max_id is None:
+            search_results = api.search(q=search_word, rpp=max_images)
+        else:
+            search_results = api.search(q=search_word, rpp=max_images, max_id=max_id)
+        # URLを取得
+        for result in search_results:
+            if 'media' in result.entities:
+                for media in result.entities['media']:
+                    url = media['media_url_https']
+                    if url not in media_url_list:
+                        media_url_list.append(url)
+        max_id = result.id-1
+
+    return media_url_list
+
+
+def get_images_from_twitter_search(keyword, max_images, output_dir):
+    media_url_list = get_image_urls_from_twitter_search(keyword, max_images)
+
+    save_directory = output_dir + keyword
+    if not os.path.exists(save_directory):
+        os.makedirs(save_directory)
+
+    for url in media_url_list:
+        # print(url)
+        url_orig = url + ":orig"
+        filename = url.split('/')[-1]
+        savepath = save_directory + "/" + filename
+
+        try:
+            print("Downloading images from " + url_orig)
+            raw_img = urllib.request.urlopen(url_orig).read()
+            f = open(os.path.join(savepath), 'wb')
+            f.write(raw_img)
+            f.close()
+        except Exception as e:
+            print("could not load : " + url)
+            print(e)
+
+
+if __name__ == '__main__':
+    research_list = ["森本慎太郎", "藤ヶ谷大輔", "八乙女光", "佐久間大介", "宮田俊哉",
+                     "ジェシー", "横山裕", "中島裕翔"]
+
+    for word in research_list:
+        get_images_from_twitter_search(word, 100, "/Users/user/Downloads/Johnnys_re/")
