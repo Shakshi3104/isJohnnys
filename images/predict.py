@@ -65,7 +65,7 @@ def predict_face(image, model):
                 print("too small")
                 continue
 
-            img = cv2.resize(image, (64, 64))
+            img = cv2.resize(img, (64, 64))
             img = np.expand_dims(img, axis=0)
 
             # モデルの予測結果
