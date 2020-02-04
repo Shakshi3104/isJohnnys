@@ -49,7 +49,6 @@ def predict_gradcam(image, model, layer_name="block5_conv3"):
     return image
 
 
-
 def predict_face(image, model):
     print(image.shape)
 
