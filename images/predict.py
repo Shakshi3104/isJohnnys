@@ -112,9 +112,12 @@ def predict_images(input_dir, model, gradcam=False):
                     head = "predict_"
                     predict_image = predict_face(image, model)
 
-                plt.imshow(predict_image)
-                plt.savefig(save_directory + "/" + head + file)
-                plt.show()
+                # plt.imshow(predict_image)
+                # plt.savefig(save_directory + "/" + head + file)
+                # plt.show()
+
+                predict_image = cv2.cvtColor(predict_image, cv2.COLOR_RGB2BGR)
+                cv2.imwrite(save_directory + "/" + head + file, predict_image)
 
             except Exception as e:
                 print("could not open : " + filepath + "by `imread`")
