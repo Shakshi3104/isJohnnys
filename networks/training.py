@@ -3,8 +3,13 @@ import matplotlib.pyplot as plt
 
 from sklearn.model_selection import train_test_split
 from tensorflow.keras.utils import to_categorical
-from networks.models import VGG, pretrained_VGG
 from tensorflow.keras.optimizers import Adam
+from tensorflow.keras.callbacks import Callback
+from sklearn.metrics import confusion_matrix
+import numpy as np
+import pandas as pd
+
+from networks.models import VGG, pretrained_VGG
 
 
 def plot_history(stack, filename=None):
@@ -61,3 +66,30 @@ def training(images, labels, pretrain=False, history_path=None, epochs=100, batc
     plot_history(stack, filename=history_path)
 
     return model
+
+
+class ConfusionMatrix(Callback):
+    def __init__(self, model, x, y, label_list=None):
+        """
+        :parameter
+        model: tensorflow.kerasのモデル
+        x: np.ndarray
+        y: np.ndarray, not one-hot vector
+        label_list: list(string), optional, list of label name
+        """
+        self.model = model
+        self.x_val = x
+        self.y_val = y
+        self.label_list = label_list
+
+    def on_epoch_end(self, epoch, logs=None):
+        if (epoch + 1) % 50 == 0:
+            predict = self.model.predict(self.x_val)
+            predict = np.argmax(predict, axis=1)
+            cf = confusion_matrix(predict, self.y_val)
+
+            if self.label_list is not None:
+                cf = pd.DataFrame(cf, columns=self.label_list, index=self.label_list)
+
+            print("Confusion Matrix")
+            print(cf)
