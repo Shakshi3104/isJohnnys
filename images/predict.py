@@ -1,5 +1,4 @@
 import numpy as np
-import matplotlib.pyplot as plt
 import cv2
 import os
 
@@ -33,6 +32,7 @@ def predict_gradcam(image, model, layer_name="block5_conv3"):
             # モデルの予測結果
             img = img / 255.
             img = np.expand_dims(img, axis=0)
+
             pred = model.predict(img)
             pred = np.argmax(pred, axis=1)
 

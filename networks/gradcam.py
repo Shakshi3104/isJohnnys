@@ -12,16 +12,16 @@ K.set_learning_phase(1)
 
 
 def grad_cam(model, x, layer_name, side=64):
-    '''
+    """
     Args:
        model: モデルオブジェクト
-       x: 画像(array)
+       x: 画像(array), 3次元, 0~255
        layer_name: 畳み込み層の名前
        side: 画像の一辺のサイズ
 
     Returns:
        jetcam: 影響の大きい箇所を色付けした画像(array)
-    '''
+    """
 
     # 前処理
     X = np.expand_dims(x, axis=0)
@@ -49,7 +49,8 @@ def grad_cam(model, x, layer_name, side=64):
     # 画像化してヒートマップにして合成
     cam = cv2.resize(cam, (side, side), cv2.INTER_LINEAR)
     cam = np.maximum(cam, 0)
-    cam = cam / cam.max()
+    if cam.max() != 0.0:
+        cam = cam / cam.max()
 
     jetcam = cv2.applyColorMap(np.uint8(255 * cam), cv2.COLORMAP_JET)  # モノクロ画像に疑似的に色をつける
     jetcam = cv2.cvtColor(jetcam, cv2.COLOR_BGR2RGB)  # 色をRGBに変換
