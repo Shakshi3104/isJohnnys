@@ -2,7 +2,7 @@ from tensorflow.keras.layers import Input, Lambda, Conv2D, MaxPooling2D, Flatten
 from tensorflow.keras.models import Model, Sequential
 from tensorflow.keras.applications import vgg16, vgg19
 # from tensorflow.image import resize_images         # tensorflow v1.14
-from tensorflow.keras.backend import resize_images   # tensorflow v1.15
+from tensorflow.keras.backend import resize_images  # tensorflow v1.15
 
 
 def VGG(weight_layer_num=16, side=64, labels=2):
@@ -14,39 +14,51 @@ def VGG(weight_layer_num=16, side=64, labels=2):
     # x = Lambda(lambda image: resize_images(image, height_factor=3, width_factor=3, data_format="channels_last"))(inputs)
 
     # conv block 1
-    x = Conv2D(filters=64, kernel_size=(3, 3), padding='same', activation='relu')(inputs)
+    x = Conv2D(filters=64, kernel_size=(3, 3), padding='same', activation='relu',
+               kernel_initializer='he_normal')(inputs)
     if weight_layer_num == 13 or weight_layer_num == 16 or weight_layer_num == 19:
-        x = Conv2D(filters=64, kernel_size=(3, 3), padding='same', activation='relu')(x)
+        x = Conv2D(filters=64, kernel_size=(3, 3), padding='same', activation='relu',
+                   kernel_initializer='he_normal')(x)
     x = MaxPooling2D(pool_size=(2, 2), strides=(2, 2), padding='same')(x)
 
     # conv block 2
-    x = Conv2D(filters=128, kernel_size=(3, 3), padding='same', activation='relu')(x)
+    x = Conv2D(filters=128, kernel_size=(3, 3), padding='same', activation='relu',
+               kernel_initializer='he_normal')(x)
     if weight_layer_num == 13 or weight_layer_num == 16 or weight_layer_num == 19:
-        x = Conv2D(filters=128, kernel_size=(3, 3), padding='same', activation='relu')(x)
+        x = Conv2D(filters=128, kernel_size=(3, 3), padding='same', activation='relu',
+                   kernel_initializer='he_normal')(x)
     x = MaxPooling2D(pool_size=(2, 2), strides=(2, 2), padding='same')(x)
 
     # conv block 3
-    x = Conv2D(filters=256, kernel_size=(3, 3), padding='same', activation='relu')(x)
-    x = Conv2D(filters=256, kernel_size=(3, 3), padding='same', activation='relu')(x)
+    x = Conv2D(filters=256, kernel_size=(3, 3), padding='same', activation='relu',
+               kernel_initializer='he_normal')(x)
+    x = Conv2D(filters=256, kernel_size=(3, 3), padding='same', activation='relu',
+               kernel_initializer='he_normal')(x)
     if weight_layer_num == 16 or weight_layer_num == 19:
-        x = Conv2D(filters=256, kernel_size=(3, 3), padding='same', activation='relu')(x)
+        x = Conv2D(filters=256, kernel_size=(3, 3), padding='same', activation='relu',
+                   kernel_initializer='he_normal')(x)
     if weight_layer_num == 19:
-        x = Conv2D(filters=256, kernel_size=(3, 3), padding='same', activation='relu')(x)
+        x = Conv2D(filters=256, kernel_size=(3, 3), padding='same', activation='relu',
+                   kernel_initializer='he_normal')(x)
     x = MaxPooling2D(pool_size=(2, 2), strides=(2, 2), padding='same')(x)
 
     # conv block 4 and conv block 5
     for _ in range(0, 2):
-        x = Conv2D(filters=512, kernel_size=(3, 3), padding='same', activation='relu')(x)
-        x = Conv2D(filters=512, kernel_size=(3, 3), padding='same', activation='relu')(x)
+        x = Conv2D(filters=512, kernel_size=(3, 3), padding='same', activation='relu',
+                   kernel_initializer='he_normal')(x)
+        x = Conv2D(filters=512, kernel_size=(3, 3), padding='same', activation='relu',
+                   kernel_initializer='he_normal')(x)
         if weight_layer_num == 16 or weight_layer_num == 19:
-            x = Conv2D(filters=512, kernel_size=(3, 3), padding='same', activation='relu')(x)
+            x = Conv2D(filters=512, kernel_size=(3, 3), padding='same', activation='relu',
+                       kernel_initializer='he_normal')(x)
         if weight_layer_num == 19:
-            x = Conv2D(filters=512, kernel_size=(3, 3), padding='same', activation='relu')(x)
+            x = Conv2D(filters=512, kernel_size=(3, 3), padding='same', activation='relu',
+                       kernel_initializer='he_normal')(x)
         x = MaxPooling2D(pool_size=(2, 2), strides=(2, 2), padding='same')(x)
 
     x = Flatten()(x)
-    x = Dense(units=1024, activation='relu')(x)
-    x = Dense(units=1024, activation='relu')(x)
+    x = Dense(units=1024, activation='relu', kernel_initializer='he_normal')(x)
+    x = Dense(units=1024, activation='relu', kernel_initializer='he_normal')(x)
     predictions = Dense(labels, activation='softmax')(x)
     model = Model(inputs=inputs, outputs=predictions)
 
@@ -63,8 +75,8 @@ def pretrained_VGG(weight_layer_num=16, side=64, labels=2, frozen_layer_num=None
 
     top_ = Sequential()
     top_.add(Flatten(input_shape=vgg_.output_shape[1:]))
-    top_.add(Dense(1024, activation='relu'))
-    top_.add(Dense(1024, activation='relu'))
+    top_.add(Dense(1024, activation='relu', kernel_initializer='he_normal'))
+    top_.add(Dense(1024, activation='relu', kernel_initializer='he_normal'))
     top_.add(Dense(labels, activation='softmax'))
 
     model = Model(inputs=vgg_.inputs, outputs=top_(vgg_.outputs))
