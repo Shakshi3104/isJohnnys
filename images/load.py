@@ -27,10 +27,10 @@ class ImageLoader():
 
     # 参考: https://qiita.com/hiroeorz@github/items/ecb39ed4042ebdc0a957
     def load_images(self, johnnys=True):
-        label_ = 1
+        label_ = 0
         dirpath = self.input_johnnys_dir
         if not johnnys:
-            label_ = 0
+            label_ = 1
             dirpath = self.input_others_dir
 
         image_list_ = []
