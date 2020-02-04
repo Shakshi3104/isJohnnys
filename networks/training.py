@@ -91,5 +91,6 @@ class ConfusionMatrix(Callback):
             if self.label_list is not None:
                 cf = pd.DataFrame(cf, columns=self.label_list, index=self.label_list)
 
+            print("")
             print("Confusion Matrix")
             print(cf)
