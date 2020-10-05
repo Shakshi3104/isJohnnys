@@ -16,7 +16,7 @@ def plot_history(stack, filename=None):
     sns.set_context("poster")
     plt.figure(figsize=(10, 12))
 
-    epochs = len(stack.history['acc'])
+    epochs = len(stack.history['accuracy'])
     e = range(epochs)
 
     plt.subplot(2, 1, 1)
