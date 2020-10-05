@@ -123,6 +123,10 @@ class PretrainedModel:
         elif self.model_name in ["EfficientNetB5", "efficientnetb5"]:
             pre_trained = effcientnet.EfficientNetB5(include_top=False, weights='imagenet', input_shape=self.input_shape)
 
+        else:
+            print("Not exists {}".format(self.model_name))
+            return None
+
         if self.extractor:
             for layer in pre_trained.layers:
                 layer.trainable = False
@@ -140,7 +144,7 @@ class PretrainedModel:
 
         y = Dense(2, activation="softmax")(x)
 
-        model = Model(inputs=pre_trained.input, output=y)
+        model = Model(inputs=pre_trained.input, outputs=y)
         return model
 
 
