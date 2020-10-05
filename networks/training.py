@@ -20,8 +20,8 @@ def plot_history(stack, filename=None):
     e = range(epochs)
 
     plt.subplot(2, 1, 1)
-    sns.lineplot(x=e, y=stack.history['acc'], label="acc", color='darkcyan')
-    sns.lineplot(x=e, y=stack.history['val_acc'], label='val_acc', color='coral')
+    sns.lineplot(x=e, y=stack.history['accuracy'], label="acc", color='darkcyan')
+    sns.lineplot(x=e, y=stack.history['val_accuracy'], label='val_acc', color='coral')
     plt.title("accuracy")
     plt.legend(loc='best')
 

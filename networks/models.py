@@ -1,8 +1,6 @@
-from tensorflow.keras.layers import Input, Lambda, Conv2D, MaxPooling2D, Flatten, Dense
+from tensorflow.keras.layers import Input, Conv2D, MaxPooling2D, Flatten, Dense, Dropout, GlobalAveragePooling2D
 from tensorflow.keras.models import Model, Sequential
-from tensorflow.keras.applications import vgg16, vgg19
-# from tensorflow.image import resize_images         # tensorflow v1.14
-from tensorflow.keras.backend import resize_images  # tensorflow v1.15
+from tensorflow.keras.applications import vgg16, vgg19, mobilenet, mobilenet_v2, resnet, effcientnet
 
 
 def VGG(weight_layer_num=16, side=64, labels=2):
@@ -95,3 +93,54 @@ def pretrained_VGG(weight_layer_num=16, side=64, labels=2, frozen_layer_num=None
         print("layer " + str(i) + " trainable: " + str(layer.trainable))
 
     return model
+
+
+class PretrainedModel:
+    def __init__(self, model_name="VGG16", input_shape=(64, 64, 3), extractor=False):
+        self.model_name = model_name
+        self.input_shape = input_shape
+        self.extractor = extractor
+
+    def __call__(self, *args, **kwargs):
+        if self.model_name in ["VGG16", "vgg16"]:
+            pre_trained = vgg16.VGG16(include_top=False, weights='imagenet', input_shape=self.input_shape)
+
+        elif self.model_name in ["VGG19", "vgg19"]:
+            pre_trained = vgg19.VGG19(include_top=False, weights='imagenet', input_shape=self.input_shape)
+
+        elif self.model_name in ["MobileNet", "mobilenet"]:
+            pre_trained = mobilenet.MobileNet(include_top=False, weights='imagenet', input_shape=self.input_shape)
+
+        elif self.model_name in ["MobileNetV2", "MobileNet_V2", "mobilenetv2", "mobilenet_v2", "mobilenet_V2"]:
+            pre_trained = mobilenet_v2.MobileNetV2(include_top=False, weights='imagenet', input_shape=self.input_shape)
+
+        elif self.model_name in ["EfficientNetB0", "efficientnetb0"]:
+            pre_trained = effcientnet.EfficientNetB0(include_top=False, weights='imagenet', input_shape=self.input_shape)
+
+        elif self.model_name in ["EfficientNetB5", "efficientnetb5"]:
+            pre_trained = effcientnet.EfficientNetB5(include_top=False, weights='imagenet', input_shape=self.input_shape)
+
+        if self.extractor:
+            for layer in pre_trained.layers:
+                layer.trainable = False
+
+        if self.model_name in ["VGG16", "vgg16", "VGG19", "vgg19"]:
+            x = Flatten()(pre_trained.output)
+            x = Dense(1024, activation="relu", kernel_initializer="he_normal")(x)
+            x = Dropout(0.5)(x)
+            x = Dense(1024, activation="relu", kernel_initializer="he_normal")(x)
+            x = Dropout(0.5)(x)
+
+        else:
+            x = GlobalAveragePooling2D()(pre_trained.output)
+            x = Flatten()(x)
+
+        y = Dense(2, activation="softmax")(x)
+
+        model = Model(inputs=pre_trained.input, output=y)
+        return model
+
+
+if __name__ == "__main__":
+    model = PretrainedModel()()
+    print(model.summary())

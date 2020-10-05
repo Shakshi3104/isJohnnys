@@ -37,8 +37,8 @@ def get_images_from_google_search(keyword, max_images, output_dir):
 
     # スクレイピング
     url = "https://www.google.co.jp/search?q="+query_+"&source=lnms&tbm=isch"
-    header = {'User-Agent':"Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/43.0.2357.134 Safari/537.36"}
-    # header = {"User-Agent": "Mozilla/5.0 (X11; Linux x86_64; rv:10.0) Gecko/20100101 Firefox/10.0"}
+    # header = {'User-Agent':"Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/43.0.2357.134 Safari/537.36"}
+    header = {"User-Agent": "Mozilla/5.0 (X11; Linux x86_64; rv:10.0) Gecko/20100101 Firefox/10.0"}
 
     soup = BeautifulSoup(urllib.request.urlopen(
         urllib.request.Request(url=url, headers=header)
@@ -68,6 +68,72 @@ def get_images_from_google_search(keyword, max_images, output_dir):
 
     return save_directory
 
+
+def get_images_from_yahoo_search(keyword, max_images, output_dir):
+    keyword_list = keyword
+    if type(keyword) is str:
+        keyword_list = [keyword]
+
+    # 保存するディレクトリを作る
+    query = "+".join(keyword_list)
+    save_directory = output_dir + "/" + query
+    if not os.path.exists(save_directory):
+        os.makedirs(save_directory)
+
+    # パーセントエンコーディング文字列の変換
+    query_ = "+".join(parse_japanese(keyword))
+
+    # スクレイピング
+    url = "https://search.yahoo.co.jp/image/search?ei=UTF-8&fr=sfp_as&aq=0&&at=s&ts=1820&p="+query_+"&meta=vc%3D"
+    # header = {'User-Agent':"Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/43.0.2357.134 Safari/537.36"}
+    # header = {"User-Agent": "Mozilla/5.0 (X11; Linux x86_64; rv:10.0) Gecko/20100101 Firefox/10.0"}
+    header = {"User-Agent": "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:47.0) Gecko/20100101 Firefox/47.0"}
+
+    soup = BeautifulSoup(urllib.request.urlopen(
+        urllib.request.Request(url=url, headers=header)
+            ), 'html.parser')
+
+    ActualImages = []
+    print("Searching " + query + " images ...")
+
+    div = soup.find('div', id='gridlist')
+    imgs = div.find_all('img')
+
+    for i in range(max_images):
+        try:
+            img = imgs[i]['src']
+            raw_img = urllib.request.urlopen(img).read()
+            f = open(os.path.join(save_directory, "img_" + str(i) + ".jpg"), 'wb')
+            f.write(raw_img)
+            f.close()
+        except Exception as e:
+            print("could not load : " + img)
+            print(e)
+
+    return save_directory
+
+
+def get_images_from_url(url, output_dir, keyword):
+    images = []  # 画像リストの配列
+
+    soup = BeautifulSoup(requests.get(url).content, 'lxml')  # bsでURL内を解析
+
+    save_directory = output_dir + "/" + keyword
+    if not os.path.exists(save_directory):
+        os.makedirs(save_directory)
+
+    for link in soup.find_all("img"):  # imgタグを取得しlinkに格納
+        if link.get("src").endswith(".jpg"):  # imgタグ内の.jpgであるsrcタグを取得
+            images.append(link.get("src"))  # imagesリストに格納
+        elif link.get("src").endswith(".png"):  # imgタグ内の.pngであるsrcタグを取得
+            images.append(link.get("src"))  # imagesリストに格納
+
+    for target in images:  # imagesからtargetに入れる
+        re = requests.get(target)
+        with open(save_directory + target.split('/')[-1], 'wb') as f:  # imgフォルダに格納
+            f.write(re.content)  # .contentにて画像データとして書き込む
+
+    return save_directory
 
 # Twitterの検索から画像を持ってくる
 # 参考: https://qiita.com/koki-sato/items/c16c8e3445287698b3a8
@@ -131,10 +197,3 @@ def get_images_from_twitter_search(keyword, max_images, output_dir):
         except Exception as e:
             print("could not load : " + url)
             print(e)
-
-
-if __name__ == '__main__':
-    research_list = ["藤ヶ谷大輔", "ジェシー"]
-
-    for word in research_list:
-        get_images_from_twitter_search(word, 100, "/Users/user/Downloads/Johnnys_re/")
