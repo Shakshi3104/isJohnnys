@@ -118,10 +118,10 @@ class PretrainedModel:
             pre_trained = resnet.ResNet50(include_top=False, weights='imagenet', input_shape=self.input_shape)
 
         elif self.model_name in ["EfficientNetB0", "efficientnetb0"]:
-            pre_trained = effcientnet.EfficientNetB0(include_top=False, weights='imagenet', input_shape=self.input_shape)
+            pre_trained = efficientnet.EfficientNetB0(include_top=False, weights='imagenet', input_shape=self.input_shape)
 
         elif self.model_name in ["EfficientNetB5", "efficientnetb5"]:
-            pre_trained = effcientnet.EfficientNetB5(include_top=False, weights='imagenet', input_shape=self.input_shape)
+            pre_trained = efficientnet.EfficientNetB5(include_top=False, weights='imagenet', input_shape=self.input_shape)
 
         else:
             print("Not exists {}".format(self.model_name))
