@@ -1,6 +1,6 @@
 from tensorflow.keras.layers import Input, Conv2D, MaxPooling2D, Flatten, Dense, Dropout, GlobalAveragePooling2D
 from tensorflow.keras.models import Model, Sequential
-from tensorflow.keras.applications import vgg16, vgg19, mobilenet, mobilenet_v2, resnet, efficientnet
+from tensorflow.keras.applications import vgg16, vgg19, mobilenet, mobilenet_v2, resnet#, efficientnet
 
 
 def VGG(weight_layer_num=16, side=64, labels=2):
@@ -117,11 +117,11 @@ class PretrainedModel:
         elif self.model_name in ["resnet50", "ResNet50"]:
             pre_trained = resnet.ResNet50(include_top=False, weights='imagenet', input_shape=self.input_shape)
 
-        elif self.model_name in ["EfficientNetB0", "efficientnetb0"]:
-            pre_trained = efficientnet.EfficientNetB0(include_top=False, weights='imagenet', input_shape=self.input_shape)
-
-        elif self.model_name in ["EfficientNetB5", "efficientnetb5"]:
-            pre_trained = efficientnet.EfficientNetB5(include_top=False, weights='imagenet', input_shape=self.input_shape)
+        # elif self.model_name in ["EfficientNetB0", "efficientnetb0"]:
+        #     pre_trained = efficientnet.EfficientNetB0(include_top=False, weights='imagenet', input_shape=self.input_shape)
+        #
+        # elif self.model_name in ["EfficientNetB5", "efficientnetb5"]:
+        #     pre_trained = efficientnet.EfficientNetB5(include_top=False, weights='imagenet', input_shape=self.input_shape)
 
         else:
             print("Not exists {}".format(self.model_name))
