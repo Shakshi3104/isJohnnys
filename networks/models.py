@@ -143,8 +143,8 @@ class PretrainedModel:
             x = Flatten()(x)
 
         y = Dense(2, activation="softmax")(x)
-
         model = Model(inputs=pre_trained.input, outputs=y)
+        model.layers[0]._name = "input"
         return model
 
 
