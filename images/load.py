@@ -52,7 +52,7 @@ class ImageLoader():
                     label_detail_list_.append(self.detail_label_list.index(detail_label))
 
                     filepath = dir1 + "/" + file
-                    print(filepath)
+                    # print(filepath)
 
                     # load an image
                     img = Image.open(filepath)
@@ -64,7 +64,7 @@ class ImageLoader():
                     img = np.array(img)
 
                     tmp_list.append(img / 255.)
-                    print(img.shape)
+                    # print(img.shape)
 
             tmp_list = np.array(tmp_list).reshape(-1, 64, 64, 3)
             if init:
